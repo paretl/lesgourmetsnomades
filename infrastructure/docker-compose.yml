@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+  terraform:
+    image: hashicorp/terraform:${TERRAFORM_VERSION}
+    working_dir: /infrastructure
+    user: ${USER_ID}
+    volumes:
+      - './:/infrastructure'
+    environment:
+      HOME: /infrastructure
+      
+      # TERRAFORM ENVIRONMENT VARIABLES
+      # Avoid suggesting commands
+      TF_IN_AUTOMATION: 'true'
+      # Disable prompts for variables that haven't had their values specified
+      TF_INPUT: 'false'
+
+      # Terraform CLI arguments
+      TF_CLI_ARGS_init: ${TF_CLI_ARGS_init:?Variable TF_CLI_ARGS_init is not present}
+      TF_CLI_ARGS_apply: ${TF_CLI_ARGS_apply:?Variable TF_CLI_ARGS_apply is not present}
+
+      # Scaleway credentials
+      SCW_ACCESS_KEY: ${SCW_ACCESS_KEY:?Variable SCW_ACCESS_KEY is not present}
+      SCW_SECRET_KEY: ${SCW_SECRET_KEY:?Variable SCW_SECRET_KEY is not present}
+      SCW_DEFAULT_PROJECT_ID: ${SCW_DEFAULT_PROJECT_ID:?Variable SCW_DEFAULT_PROJECT_ID is not present}
+
+      # UptimeRobot credentials
+      UPTIMEROBOT_API_KEY: ${UPTIMEROBOT_API_KEY:?Variable UPTIMEROBOT_API_KEY is not present}
+
+    # Overwrite 'terraform' entrypoint by nothing
+    entrypoint: ''
+    # Define the new command to be more flexible
+    command: terraform ${STEP} ${COMMAND_OPTIONS}

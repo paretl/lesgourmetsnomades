@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  wordpress:
+    image: wordpress:6.0.0
+    restart: always
+    volumes:
+      - ./wp-core:/var/www/html
+      - ./wp-content:/var/www/html/wp-content
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${LESGOURMETSNOMADES_WORDPRESS_DB_USER:?Variable LESGOURMETSNOMADES_WORDPRESS_DB_USER is not present}
+      WORDPRESS_DB_PASSWORD: ${LESGOURMETSNOMADES_WORDPRESS_DB_PASSWORD:?Variable LESGOURMETSNOMADES_WORDPRESS_DB_PASSWORD is not present}
+      WORDPRESS_DB_NAME: ${LESGOURMETSNOMADES_WORDPRESS_DB_NAME:?Variable LESGOURMETSNOMADES_WORDPRESS_DB_NAME is not present}
+      VIRTUAL_HOST: lesgourmetsnomades.fr,www.lesgourmetsnomades.fr
+      LETSENCRYPT_HOST: lesgourmetsnomades.fr,www.lesgourmetsnomades.fr
+
+networks:
+  default:
+    external:
+      name: web

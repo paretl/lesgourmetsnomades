@@ -1,0 +1,53 @@
+
+name: Deployment
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'deployment/**'
+      - '.github/workflows/deployment.yml'
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    # Runs a single command using the runners shell
+    - name: Launch deployment
+      shell: bash
+      env:
+        # MySQL Database name
+        MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+        # MySQL Root Password
+        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        # MySQL Default Username/password
+        MYSQL_USER: ${{ secrets.MYSQL_USER }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        # Lesgourmetsnomades Database
+        LESGOURMETSNOMADES_WORDPRESS_DB_NAME: ${{ secrets.LESGOURMETSNOMADES_WORDPRESS_DB_NAME }}
+        LESGOURMETSNOMADES_WORDPRESS_DB_USER: ${{ secrets.LESGOURMETSNOMADES_WORDPRESS_DB_USER }}
+        LESGOURMETSNOMADES_WORDPRESS_DB_PASSWORD: ${{ secrets.LESGOURMETSNOMADES_WORDPRESS_DB_PASSWORD }}
+        # Github Runner Token
+        GITHUB_RUNNER_TOKEN: ${{ secrets.RUNNER_TOKEN }}
+      run: |
+        echo -e """# MySQL Database name
+        MYSQL_DATABASE="${MYSQL_DATABASE}"
+        # MySQL Root Password
+        MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD}"
+        # MySQL Default Username/password
+        MYSQL_USER="${MYSQL_USER}"
+        MYSQL_PASSWORD="${MYSQL_PASSWORD}"
+        # Lesgourmetsnomades Database
+        LESGOURMETSNOMADES_WORDPRESS_DB_NAME="${LESGOURMETSNOMADES_WORDPRESS_DB_NAME}"
+        LESGOURMETSNOMADES_WORDPRESS_DB_USER="${LESGOURMETSNOMADES_WORDPRESS_DB_USER}"
+        LESGOURMETSNOMADES_WORDPRESS_DB_PASSWORD="${LESGOURMETSNOMADES_WORDPRESS_DB_PASSWORD}"
+        # Github Runner Token
+        GITHUB_RUNNER_TOKEN=${GITHUB_RUNNER_TOKEN}
+        """ >> "./deployment/.env"
+        ./deployment/deployment.sh

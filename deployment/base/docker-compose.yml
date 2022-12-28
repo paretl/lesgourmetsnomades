@@ -1,0 +1,119 @@
+version: '3.7'
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    restart: always
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx-certs:/etc/nginx/certs
+      - ./nginx-vhost:/etc/nginx/vhost.d
+      - ./nginx-html:/usr/share/nginx/html
+      - ./nginx:/etc/nginx/conf.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  letsencrypt-nginx-proxy-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    volumes:
+      - ./nginx-certs:/etc/nginx/certs
+      - ./nginx-vhost:/etc/nginx/vhost.d
+      - ./nginx-html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      NGINX_PROXY_CONTAINER: nginx-proxy
+      DEFAULT_EMAIL: louis.paret@gmail.com
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Variable MYSQL_ROOT_PASSWORD is not present}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?Variable MYSQL_DATABASE is not present}
+      MYSQL_USER: ${MYSQL_USER:?Variable MYSQL_USER is not present}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Variable MYSQL_PASSWORD is not present}
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      MYSQL_USERNAME: ${MYSQL_USER:?Variable MYSQL_USER is not present}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Variable MYSQL_ROOT_PASSWORD is not present}
+      VIRTUAL_HOST: phpmyadmin.louisparet.ovh
+      LETSENCRYPT_HOST: phpmyadmin.louisparet.ovh
+    volumes:
+      - ./phpmyadmin/php.ini:/usr/local/etc/php/php.ini
+
+  prometheus:
+    image: prom/prometheus:v2.41.0
+    container_name: prometheus
+    restart: always
+    environment:
+      VIRTUAL_HOST: prometheus.louisparet.ovh
+      LETSENCRYPT_HOST: prometheus.louisparet.ovh
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-storage:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.config.file=/etc/prometheus/web.yml'
+
+  grafana:
+    image: grafana/grafana:9.1.7
+    container_name: grafana
+    restart: always
+    environment:
+      VIRTUAL_HOST: grafana.louisparet.ovh
+      LETSENCRYPT_HOST: grafana.louisparet.ovh
+      GF_INSTALL_PLUGINS: grafana-github-datasource
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+  node-exporter:
+    image: prom/node-exporter:v1.5.0
+    container_name: node-exporter
+    restart: always
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.46.0
+    container_name: cadvisor
+    restart: always
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+  
+  worker:
+    image: myoung34/github-runner:2.300.2-ubuntu-jammy
+    environment:
+      REPO_URL: https://github.com/paretl/lesgourmetsnomades
+      RUNNER_NAME: primary-runner
+      RUNNER_TOKEN: ${GITHUB_RUNNER_TOKEN:?Variable GITHUB_RUNNER_TOKEN is not present}
+      CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /tmp
+    security_opt:
+      # needed on SELinux systems to allow docker container to manage other docker containers
+      - label:disable
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - '/home/lparet/.ssh/id_rsa:/root/.ssh/id_rsa'
+      - '/_work:/_work'
+
+volumes:
+  db_data: {}
+  prometheus-storage:
+  grafana-storage:
+
+networks:
+  default:
+    external:
+      name: web

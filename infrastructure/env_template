@@ -1,0 +1,6 @@
+# Scaleway keys and project
+export SCW_ACCESS_KEY=
+export SCW_SECRET_KEY=
+export SCW_DEFAULT_PROJECT_ID=
+# UptimeRobot API Key
+export UPTIMEROBOT_API_KEY=

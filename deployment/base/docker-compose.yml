@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   nginx-proxy:
-    image: jwilder/nginx-proxy:alpine
+    image: jwilder/nginx-proxy:1.0.4-alpine
     restart: always
     container_name: nginx-proxy
     ports:
@@ -16,8 +16,9 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
 
   letsencrypt-nginx-proxy-companion:
-    image: jrcs/letsencrypt-nginx-proxy-companion
+    image: nginxproxy/acme-companion:2.2.3
     restart: always
+    container_name: nginx-proxy-acme
     volumes:
       - ./nginx-certs:/etc/nginx/certs
       - ./nginx-vhost:/etc/nginx/vhost.d
@@ -39,7 +40,7 @@ services:
       - db_data:/var/lib/mysql
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.2.0-fpm-alpine
     restart: always
     environment:
       MYSQL_USERNAME: ${MYSQL_USER:?Variable MYSQL_USER is not present}

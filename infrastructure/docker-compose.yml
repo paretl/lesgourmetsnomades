@@ -25,6 +25,11 @@ services:
       SCW_SECRET_KEY: ${SCW_SECRET_KEY:?Variable SCW_SECRET_KEY is not present}
       SCW_DEFAULT_PROJECT_ID: ${SCW_DEFAULT_PROJECT_ID:?Variable SCW_DEFAULT_PROJECT_ID is not present}
 
+      # OVH credentials
+      OVH_APPLICATION_KEY: ${OVH_APPLICATION_KEY:?Variable OVH_APPLICATION_KEY is not present}
+      OVH_APPLICATION_SECRET: ${OVH_APPLICATION_SECRET:?Variable OVH_APPLICATION_SECRET is not present}
+      OVH_CONSUMER_KEY: ${OVH_CONSUMER_KEY:?Variable OVH_CONSUMER_KEY is not present}
+
       # UptimeRobot credentials
       UPTIMEROBOT_API_KEY: ${UPTIMEROBOT_API_KEY:?Variable UPTIMEROBOT_API_KEY is not present}
 

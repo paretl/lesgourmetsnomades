@@ -27,6 +27,10 @@ jobs:
         SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
         # UptimeRobot API Key
         UPTIMEROBOT_API_KEY: ${{ secrets.UPTIMEROBOT_API_KEY }}
+        # OVH API
+        OVH_APPLICATION_KEY: ${{ secrets.OVH_APPLICATION_KEY }}
+        OVH_APPLICATION_SECRET: ${{ secrets.OVH_APPLICATION_SECRET }}
+        OVH_CONSUMER_KEY: ${{ secrets.OVH_CONSUMER_KEY }}
       run: |
         echo -e """# Scaleway keys and project
         export SCW_ACCESS_KEY="${SCW_ACCESS_KEY}"
@@ -34,6 +38,10 @@ jobs:
         export SCW_DEFAULT_PROJECT_ID="${SCW_DEFAULT_PROJECT_ID}"
         # UptimeRobot API Key
         export UPTIMEROBOT_API_KEY="${UPTIMEROBOT_API_KEY}"
+        # OVH API
+        export OVH_APPLICATION_KEY="${OVH_APPLICATION_KEY}"
+        export OVH_APPLICATION_SECRET="${OVH_APPLICATION_SECRET}"
+        export OVH_CONSUMER_KEY="${OVH_CONSUMER_KEY}"
         # TF API token
         export TF_API_TOKEN="${TF_API_TOKEN}"
         """ >> "./infrastructure/.env"

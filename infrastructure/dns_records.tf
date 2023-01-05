@@ -8,7 +8,8 @@ locals {
   louisparet_domain_names = toset([
     "prometheus",
     "phpmyadmin",
-    "grafana"
+    "grafana",
+    "portainer"
   ])
 }
 

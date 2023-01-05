@@ -20,6 +20,27 @@ provider "registry.terraform.io/louy/uptimerobot" {
   ]
 }
 
+provider "registry.terraform.io/ovh/ovh" {
+  version     = "0.25.0"
+  constraints = "0.25.0"
+  hashes = [
+    "h1:kEPraqv+wAXXjNKHEbTSd4zqoHRApOEOhF/fZWnVkIg=",
+    "zh:29870f486caeb6a7e92d2f2b901a991aa9712a96d7ed3b0b58a3da41dbb24123",
+    "zh:4031fae5f20fb37201ccc6708fd4747229f4aa1c14e2789d8d70e8b3dc310cf1",
+    "zh:821b13314f575c86bbb41507aae9d523618fc24116afdd5161b11fb7619d98ed",
+    "zh:8528f2ce62cb76d4dddba6efcd626420d863583df45ed913f8ea4a01e143c564",
+    "zh:a2c21ec7a4a624eb47b4acb8ed6c7ba6ec7f376048b40769ea641656ede60c52",
+    "zh:a7c2c4de25d375def2815318da9a4f494d48809e0b532a382512d8dfd5d3291c",
+    "zh:ad690ac00b9559dd7a5e3678aecfa4e5cff4475cfbec923870c41ad33666748e",
+    "zh:aef3041921799f85eea88099514cb962d74055e41f695f938a5c6eb999b68e31",
+    "zh:bad0fe5e29be6a5f196cef8e3cda0d0b58350941861368fcd9bda54f0c3ad440",
+    "zh:cf3b070be7b7ecb0a792d6798fac8b0cebf2377045705ab547915bbc3c89ee42",
+    "zh:ecc15dedb98b4558b1fac202f9b6cb9b1b8372b4f2c050628ad4ec6604eea190",
+    "zh:f0d61e5f9140332e0459794d0ec142eef06801266543d9a3da660d68c7062851",
+    "zh:f608fce55d5b771838a8622e70b996fc33f5ecfb04af7dcb97bc1916d0a22ed7",
+  ]
+}
+
 provider "registry.terraform.io/scaleway/scaleway" {
   version     = "2.8.0"
   constraints = "2.8.0"

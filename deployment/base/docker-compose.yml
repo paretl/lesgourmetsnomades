@@ -96,6 +96,7 @@ services:
   
   worker:
     image: myoung34/github-runner:2.300.2-ubuntu-jammy
+    restart: always
     environment:
       REPO_URL: https://github.com/paretl/lesgourmetsnomades
       RUNNER_NAME: primary-runner
@@ -109,10 +110,23 @@ services:
       - '/home/lparet/.ssh/id_rsa:/root/.ssh/id_rsa'
       - '/_work:/_work'
 
+  portainer:
+    image: portainer/portainer:1.25.0-alpine
+    container_name: portainer
+    restart: always
+    environment:
+      VIRTUAL_HOST: portainer.louisparet.ovh
+      VIRTUAL_PORT: 9000
+      LETSENCRYPT_HOST: portainer.louisparet.ovh
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - 'portainer_data:/data'
+
 volumes:
   db_data: {}
   prometheus-storage:
   grafana-storage:
+  portainer_data:
 
 networks:
   default:

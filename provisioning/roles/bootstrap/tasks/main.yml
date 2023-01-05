@@ -1,0 +1,28 @@
+---
+
+- name: Disable root SSH login on servers
+  lineinfile: 
+    name: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+
+- name: Disable SSH Password Authentication
+  lineinfile: 
+    name: /etc/ssh/sshd_config
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"
+
+- name: Allow only strong cipher for SSH
+  lineinfile: 
+    name: /etc/ssh/sshd_config
+    regexp: "^Ciphers"
+    line: "Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
+
+- name: Reload sshd server
+  service: 
+    name: sshd
+    state: reloaded
+
+- name: Disable SELinux
+  selinux:
+    state: disabled

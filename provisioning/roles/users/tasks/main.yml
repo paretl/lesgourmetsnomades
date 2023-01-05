@@ -1,0 +1,40 @@
+---
+# tasks file for users
+
+- name: Ensure that the {{ primary_group }} group exists.
+  become: True
+  group:
+    name: "{{ primary_group }}"
+    gid: 42000
+
+- name: Allow '{{ primary_group }}' group to have passwordless sudo.
+  become: True
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^%{{ primary_group }}"
+    line: '%{{ primary_group }} ALL=(ALL) NOPASSWD: ALL'
+    validate: visudo -cf %s
+
+- name: Create users.
+  become: True
+  user:
+    name: "{{ item.username }}"
+    group: "{{ item.primary_group | default(primary_group) }}"
+    state: "{{ item.state | default('present') }}"
+    # Permits to not remove the user from other groups in case another role wants to do it
+    append: yes
+  with_items:
+    - "{{ ssh_users }}"
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Add public key to authorized_keys for each user.
+  become: True
+  authorized_key:
+    user: "{{ item.username }}"
+    state: "{{ item.state }}"
+    key: "{{ lookup('file', '{{ publickey_path }}/{{ item.username }}.pub') }}"
+  with_items:
+    - "{{ ssh_users }}"
+  when: item.state == 'present'
+  ignore_errors: "{{ ansible_check_mode }}"

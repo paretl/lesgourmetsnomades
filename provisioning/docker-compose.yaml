@@ -1,0 +1,22 @@
+
+version: "3.7"
+
+services:
+  ansible:
+    image: lparet/docker-image-ansible:${ANSIBLE_VERSION}
+    working_dir: /deployment
+    # Enable color of Ansible
+    tty: true
+    volumes:
+      - ./:/deployment
+      - '/home/lparet/.ssh/id_rsa:/root/.ssh/id_rsa'
+    environment:
+
+      # Options passed by the parent bash script
+      ANSIBLE_OPTIONS: ${ANSIBLE_OPTIONS}
+
+      # Ansible user to use
+      ANSIBLE_USER: ${ANSIBLE_USER}
+
+    # Define the new command to be more flexible
+    command: sh -c "/deployment/docker/start.sh"

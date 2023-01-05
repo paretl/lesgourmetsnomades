@@ -1,0 +1,14 @@
+---
+# defaults file for users
+
+# Default public key path
+publickey_path: "./files/users/ssh_pub_keys"
+
+# Default primary group
+primary_group: user
+
+# SSH users to create
+# To remove one, change state to absent
+ssh_users:
+  - username: lparet
+    state: present

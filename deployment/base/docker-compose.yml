@@ -40,59 +40,16 @@ services:
       - db_data:/var/lib/mysql
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.2.0-fpm-alpine
+    image: phpmyadmin/phpmyadmin:5.2.1
     restart: always
     environment:
+      MEMORY_LIMIT: 256M
+      HIDE_PHP_VERSION: true
+      UPLOAD_LIMIT: 100M
       MYSQL_USERNAME: ${MYSQL_USER:?Variable MYSQL_USER is not present}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Variable MYSQL_ROOT_PASSWORD is not present}
       VIRTUAL_HOST: phpmyadmin.louisparet.ovh
       LETSENCRYPT_HOST: phpmyadmin.louisparet.ovh
-    volumes:
-      - ./phpmyadmin/php.ini:/usr/local/etc/php/php.ini
-
-  prometheus:
-    image: prom/prometheus:v2.41.0
-    container_name: prometheus
-    restart: always
-    environment:
-      VIRTUAL_HOST: prometheus.louisparet.ovh
-      LETSENCRYPT_HOST: prometheus.louisparet.ovh
-    volumes:
-      - ./prometheus:/etc/prometheus
-      - prometheus-storage:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-      - '--web.config.file=/etc/prometheus/web.yml'
-
-  grafana:
-    image: grafana/grafana:9.1.7
-    container_name: grafana
-    restart: always
-    environment:
-      VIRTUAL_HOST: grafana.louisparet.ovh
-      LETSENCRYPT_HOST: grafana.louisparet.ovh
-      GF_INSTALL_PLUGINS: grafana-github-datasource
-    volumes:
-      - grafana-storage:/var/lib/grafana
-
-  node-exporter:
-    image: prom/node-exporter:v1.5.0
-    container_name: node-exporter
-    restart: always
-
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.46.0
-    container_name: cadvisor
-    restart: always
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
   
   worker:
     image: myoung34/github-runner:2.300.2-ubuntu-jammy
@@ -110,23 +67,8 @@ services:
       - '/home/lparet/.ssh/id_rsa:/root/.ssh/id_rsa'
       - '/_work:/_work'
 
-  portainer:
-    image: portainer/portainer:1.25.0-alpine
-    container_name: portainer
-    restart: always
-    environment:
-      VIRTUAL_HOST: portainer.louisparet.ovh
-      VIRTUAL_PORT: 9000
-      LETSENCRYPT_HOST: portainer.louisparet.ovh
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock'
-      - 'portainer_data:/data'
-
 volumes:
   db_data: {}
-  prometheus-storage:
-  grafana-storage:
-  portainer_data:
 
 networks:
   default:

@@ -6,10 +6,7 @@ data "ovh_domain_zone" "louisparet" {
 
 locals {
   louisparet_domain_names = toset([
-    "prometheus",
-    "phpmyadmin",
-    "grafana",
-    "portainer"
+    "phpmyadmin"
   ])
 }
 

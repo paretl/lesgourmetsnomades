@@ -1,3 +1,0 @@
-basic_auth_users:
-  admin: $2a$12$QPeSzrrJS.e2iLFSqVmfguCCK80jOzLR2zldAzHPf0/SzU8/kkN/i
-  grafana: $2a$12$N5PJ9RN83abRY.E4Pr.E0uReku8paj9v1q0ArmtDMlNtjcIUt2KZ6

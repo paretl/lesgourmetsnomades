@@ -12,7 +12,7 @@ BASH_METHODS_PATH="${BASEDIR}/../bash-methods"
 source "${BASH_METHODS_PATH}"/env-file/source-dot-env-file.sh
 
 SSH_OPTIONS="-o StrictHostKeyChecking=no"
-PROD_SERVER="lparet@163.172.179.145"
+PROD_SERVER="lparet@51.15.128.190"
 SSH_COMMAND_EXEC="ssh ${SSH_OPTIONS} ${PROD_SERVER}"
 
 REMOTE_BASE_DIRECTORY="/home/lparet/base"

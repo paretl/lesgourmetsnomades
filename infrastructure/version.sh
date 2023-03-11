@@ -1,3 +1,3 @@
 #!/bin/bash
 
-export TERRAFORM_VERSION='1.3.6'
+export TERRAFORM_VERSION='1.4.0'

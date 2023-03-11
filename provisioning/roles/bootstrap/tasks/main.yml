@@ -22,7 +22,3 @@
   service: 
     name: sshd
     state: reloaded
-
-- name: Disable SELinux
-  selinux:
-    state: disabled

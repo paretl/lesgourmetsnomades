@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   wordpress:
-    image: wordpress:6.1.1
+    image: wordpress:6.2.0
     restart: always
     volumes:
       - ./wp-core:/var/www/html

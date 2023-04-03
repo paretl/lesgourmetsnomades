@@ -39,37 +39,39 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.2.1
-    restart: always
-    environment:
-      MEMORY_LIMIT: 256M
-      HIDE_PHP_VERSION: true
-      UPLOAD_LIMIT: 100M
-      MYSQL_USERNAME: ${MYSQL_USER:?Variable MYSQL_USER is not present}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Variable MYSQL_ROOT_PASSWORD is not present}
-      VIRTUAL_HOST: phpmyadmin.louisparet.ovh
-      LETSENCRYPT_HOST: phpmyadmin.louisparet.ovh
-  
-  worker:
-    image: myoung34/github-runner:2.300.2-ubuntu-jammy
-    restart: always
-    environment:
-      REPO_URL: https://github.com/paretl/lesgourmetsnomades
-      RUNNER_NAME: primary-runner
-      RUNNER_TOKEN: ${GITHUB_RUNNER_TOKEN:?Variable GITHUB_RUNNER_TOKEN is not present}
-      CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /tmp
-    security_opt:
-      # needed on SELinux systems to allow docker container to manage other docker containers
-      - label:disable
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock'
-      - '/home/lparet/.ssh/id_rsa:/root/.ssh/id_rsa'
-      - '/_work:/_work'
-
 volumes:
   db_data: {}
 
 networks:
   default:
     name: web
+
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin:5.2.1
+  #   restart: always
+  #   environment:
+  #     MEMORY_LIMIT: 128M
+  #     HIDE_PHP_VERSION: true
+  #     UPLOAD_LIMIT: 100M
+  #     MYSQL_USERNAME: ${MYSQL_USER:?Variable MYSQL_USER is not present}
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Variable MYSQL_ROOT_PASSWORD is not present}
+  #     VIRTUAL_HOST: phpmyadmin.louisparet.ovh
+  #     LETSENCRYPT_HOST: phpmyadmin.louisparet.ovh
+  
+  # worker:
+  #   image: myoung34/github-runner:2.300.2-ubuntu-jammy
+  #   restart: always
+  #   environment:
+  #     REPO_URL: https://github.com/paretl/lesgourmetsnomades
+  #     RUNNER_NAME: primary-runner
+  #     RUNNER_TOKEN: ${GITHUB_RUNNER_TOKEN:?Variable GITHUB_RUNNER_TOKEN is not present}
+  #     CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /tmp
+  #   security_opt:
+  #     # needed on SELinux systems to allow docker container to manage other docker containers
+  #     - label:disable
+  #   volumes:
+  #     - '/var/run/docker.sock:/var/run/docker.sock'
+  #     - '/home/lparet/.ssh/id_rsa:/root/.ssh/id_rsa'
+  #     - '/_work:/_work'
+
+

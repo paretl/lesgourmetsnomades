@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   wordpress:
-    image: wordpress:6.2.0
+    image: wordpress:6.3.2
     restart: always
     volumes:
       - ./wp-core:/var/www/html
@@ -17,9 +17,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1000M
+          memory: 1100M
         reservations:
-          memory: 1000M
+          memory: 1100M
 
 networks:
   default:

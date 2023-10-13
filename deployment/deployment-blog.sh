@@ -27,7 +27,7 @@ ${SSH_COMMAND_EXEC} chmod 700 "${REMOTE_BASE_DIRECTORY}"/start.sh
 ${SSH_COMMAND_EXEC} "${REMOTE_BASE_DIRECTORY}"/start.sh
 
 REMOTE_WEBSITE_DIRECTORY="/home/lparet/lesgourmetsnomades"
-LOCAL_WEBSITE_DIRECTORY="${BASEDIR}/lesgourmetsnomades"
+LOCAL_WEBSITE_DIRECTORY="${BASEDIR}/blog"
 
 printf 'Deploy lesgourmetsnomades.fr website.\n' "${WEBSITE_NAME}"
 ${SSH_COMMAND_EXEC} mkdir -p "${REMOTE_WEBSITE_DIRECTORY}"

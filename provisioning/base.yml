@@ -3,6 +3,13 @@
 - hosts: all
   become: true
   roles:
-    - role: bootstrap
     - role: users
+    - role: bootstrap
     - role: docker
+  tasks:
+    - name: Create a crontab to restart docker everyday
+      ansible.builtin.cron:
+        name: "Restart Docker service everyday"
+        minute: "0"
+        hour: "2"
+        job: "sudo service docker restart"
